@@ -7,25 +7,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnimalDAO {
-    private final String JDBC_URL = "jdbc:mysql://localhost:3306/friends_of_human";
-    private final String JDBC_USER = "root";
-    private final String JDBC_PASSWORD = "password";
 
-    private void addAnimal(Animal animal, String tableName) throws SQLException {
-        String query = "INSERT INTO " + tableName + " (name, birthDate, animalType) VALUES (?, ?, ?)";
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {
+    public void addAnimal(String name, Date birthDate, String animalType) throws SQLException {
+        String tableName;
+        if (animalType.toLowerCase().equals("dog") ||
+            animalType.toLowerCase().equals("cat") ||
+            animalType.toLowerCase().equals("hamster")) {
+            tableName = "pets";
+        } else if (animalType.toLowerCase().equals("horse") ||
+                animalType.toLowerCase().equals("camel") ||
+                animalType.toLowerCase().equals("donkey")) {
+            tableName = "pack_animals";
+        } else {
+            throw new SQLException("Unsupported animalType: " + animalType);
+        }
+
+        String query = "INSERT INTO "+ tableName + " (name, birthDate, animalType) VALUES (?, ?, ?)";
+        try (Connection connection = DatabaseConnection.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, animal.getName());
-            statement.setDate(2, Date.valueOf(animal.getBirthDate()));
-            statement.setString(3, animal.getClass().getSimpleName());
+            statement.setString(1, name);
+            statement.setDate(2, birthDate);
+            statement.setString(3, animalType);
             statement.executeUpdate();
         }
     }
 
     public List<Animal> getAllAnimals() throws SQLException {
         List<Animal> animals = new ArrayList<>();
-        String query = "SELECT * FROM Animals";
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {
+        String query = "SELECT * FROM pets UNION SELECT * FROM pack_animals";
+        try (Connection connection = DatabaseConnection.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
@@ -41,7 +51,7 @@ public class AnimalDAO {
 
     public void deleteCamel() throws SQLException {
         String query = "DELETE FROM pack_animals WHERE animalType = 'Camel'";
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD)) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);
         }

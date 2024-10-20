@@ -10,6 +10,7 @@ import com.test.mvp.model.animal.pet.Dog;
 import com.test.mvp.model.animal.pet.Hamster;
 import com.test.mvp.view.ConsoleUI;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Presenter {
@@ -57,13 +58,9 @@ public class Presenter {
         LocalDate birthDate = view.getAnimalBirthDate();
         String animalType = view.getAnimalType();
 
-        Animal newAnimal = createAnimal(name, birthDate, animalType);
-        if (newAnimal != null) {
-            model.addAnimal(newAnimal);
-            view.showMessage ("Animal successfully added: " + newAnimal);
-        } else {
-            view.showMessage ("Unknown type of animal");
-        }
+        model.addAnimal(name, Date.valueOf(birthDate), animalType);
+        view.showMessage("Animal successfully added: " + name);
+
     }
 
     private Animal createAnimal(String name, LocalDate birthDate, String animalType) {
@@ -81,7 +78,7 @@ public class Presenter {
             case "donkey":
                 return new Donkey(name, birthDate);
             default:
-                view.showMessage ("Unknown type of animal");
+                view.showMessage("Unknown type of animal");
         }
         return null;
     }

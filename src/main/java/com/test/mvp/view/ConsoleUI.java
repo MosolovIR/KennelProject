@@ -31,7 +31,7 @@ public class ConsoleUI {
 
     public String getAnimalName() {
         System.out.println("Enter animal's name: ");
-        return scanner.next();
+        return scanner.nextLine();
     }
 
     public LocalDate getAnimalBirthDate() {
