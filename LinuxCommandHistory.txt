@@ -1,0 +1,19 @@
+   14  cat > Pets.txt
+   15  PackAnimals.txt
+   16  cat > PackAnimals.txt
+   17  cat Pets.txt PackAnimals.txt > Animals.txt
+   18  mv Animals.txt HumanFriends.txt
+   19  ls
+   20  clear
+   21  mkdir PetsDir
+   22  mv HumanFriends.txt PetsDir/
+   23  clear
+   24  sudo apt-get update
+   25  sudo apt-get install mysql-server
+   26  clear
+   27  mysql --version
+   28  clear
+   29  sudo apt-get install figlet
+   30  figlet "Hello World!"
+   31  sudo apt-get remove figlet
+   32  history > LinuxCommandHistory.txt
